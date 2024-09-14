@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Text, Button, StyleSheet } from 'react-native';
 import { evaluate } from 'mathjs';
-// import { Buttons } from '@/components/Buttons'
+import CalculatorButton  from '@/components/CalculatorButton'
 
 export default function HomeScreen() { 
 
@@ -23,16 +23,39 @@ export default function HomeScreen() {
       setResult(null); 
     }
   }
+  const handleBackSpace = () =>{
+    
+    const reducedInput = input.slice(0, -1);
+    setInput(reducedInput);
+  
 
-  const hadleClear = () =>{
+  }
+
+  const handleClear = () =>{
     setResult(null);
     setInput('');  
   }
 
   return (
-    <View>
-      <Text>Hello World!</Text>
+    <View style={styles.container}>
+      <Text>{input}</Text>
+      <Text>{result}</Text>
+      <CalculatorButton
+        onButtonPress={handleButtonPress}
+        onOperation={handleOperation}
+        onClear={handleClear}
+        onBackSpace={handleBackSpace}
+      />
     </View>
   );
 }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexGrow:1,
+    backgroundColor: 'white', 
+    justifyContent: 'center', 
+    alignItems: 'center', 
+  },
+});
 
