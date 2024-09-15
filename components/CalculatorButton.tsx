@@ -4,6 +4,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Pressable} from '
 
 
 type ButtonProps = {
+    onNthRoot : () => void; 
     onButtonPress: (value: string) => void;
     onOperation: () => void;
     onClear: () => void;
@@ -11,7 +12,7 @@ type ButtonProps = {
     inputValue: string; 
     outputValue: string;
   };
-export default function CalculatorButton({ onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
+export default function CalculatorButton({onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
         const [isDegree, setIsDegree] = useState(true);
         const [isScientific, setIsScientific] = useState(true);
         
