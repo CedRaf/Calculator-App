@@ -5,6 +5,9 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Pressable} from '
 
 type ButtonProps = {
     onNthRoot : () => void; 
+    onMemMinus : () => void; 
+    onMemPlus : () => void; 
+    onMemReturn : () => void; 
     onButtonPress: (value: string) => void;
     onOperation: () => void;
     onClear: () => void;
@@ -12,7 +15,7 @@ type ButtonProps = {
     inputValue: string; 
     outputValue: string;
   };
-export default function CalculatorButton({onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
+export default function CalculatorButton({onMemMinus, onMemPlus, onMemReturn, onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
         const [isDegree, setIsDegree] = useState(true);
         const [isScientific, setIsScientific] = useState(true);
         
@@ -71,12 +74,12 @@ export default function CalculatorButton({onNthRoot, onButtonPress, onOperation,
                 break; 
 
                 //incomplete equations
-            // case 'y√x':
-            //     onButtonPress('');
-            //     break;
-            // case '3√x':
-            //     onButtonPress('');
-            //     break;
+            case 'y√x':
+                onNthRoot();
+                break;
+            case '3√x':
+                onButtonPress('');
+                break;
             case '√x':
                 onButtonPress('sqrt('); //test
                 break;
@@ -104,15 +107,15 @@ export default function CalculatorButton({onNthRoot, onButtonPress, onOperation,
             case '10ˣ':
                 onButtonPress('10^'); //test
                 break; 
-            // case 'M+':
-            //     onButtonPress('');
-            //     break;   
-            // case 'M-':
-            //     onButtonPress('');
-            //     break;            
-            // case 'MR':
-            //     onButtonPress('');
-            //     break;     
+            case 'M+':
+                onMemPlus();
+                break;   
+            case 'M-':
+                onMemMinus();
+                break;            
+            case 'MR':
+                onMemReturn();
+                break;     
             case '=':
                 onOperation();
                 break;

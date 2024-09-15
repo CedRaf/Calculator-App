@@ -82,7 +82,8 @@ const styles = StyleSheet.create({
 
       //index.tsx 
       container: {
-        flex: 1,
+        
+        flexGrow: 1,
         backgroundColor: 'white',
         justifyContent: 'center',
         alignItems: 'center',

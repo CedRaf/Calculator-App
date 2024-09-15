@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styles from '@/style/style';
-import { View, Text, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { evaluate, nthRoot } from 'mathjs';
 import CalculatorButton from '@/components/CalculatorButton';
 
@@ -48,13 +48,27 @@ export default function HomeScreen() {
     setInput(memory.toString()); 
   }
 
-  const handleXYRoot = () =>{
-    let lastChar = input.charAt(input.length - 1);
-    handleButtonPress(`nthRoot(${lastChar},`);
-  }
-
+  const handleXYRoot = () => {
+    // Split input to separate y and x (e.g., for "y√x", y = input before the last number, x = the last number)
+    const inputArray = input.split(/([+\-*/])/); // Split input by operators
+    const x = inputArray.pop(); // x is the last value (number we want the root of)
+    const y = inputArray.join(''); // y is the rest of the input (base of the root)
+    
+    if (x && y) {
+      // Use the nthRoot function from mathjs to compute y√x
+      const result = evaluate(`nthRoot(${x}, ${y})`);
+      
+      // Set the result
+      setResult(result);
+      setInput(result.toString()); // Update the input to show the result
+    } else {
+      // Handle cases where y or x is missing or invalid
+      setResult(0);
+      setInput('');
+    }
+  };
   return (
-    <View style={styles.container}>
+    <ScrollView contentContainerStyle={styles.container}>
       {/* Display Input and Result */}
       <View style={styles.displaySection}>
         <Text style={styles.inputText}>{input || '0'}</Text>
@@ -63,6 +77,9 @@ export default function HomeScreen() {
 
       {/* Calculator Buttons */}
       <CalculatorButton
+        onMemPlus = {handleMemPlus}
+        onMemMinus = {handleMemMinus}
+        onMemReturn = {handleMemReturn}
         onNthRoot = {handleXYRoot}
         onButtonPress={handleButtonPress}
         onOperation={handleOperation}
@@ -71,7 +88,7 @@ export default function HomeScreen() {
         inputValue={input}
         outputValue={result !== null ? result.toString() : ''}
       />
-    </View>
+    </ScrollView>
   );
 }
 
