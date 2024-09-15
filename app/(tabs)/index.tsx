@@ -1,61 +1,55 @@
 import { useState } from 'react';
-import {View, Text, Button, StyleSheet } from 'react-native';
+import styles from '@/style/style';
+import { View, Text, StyleSheet } from 'react-native';
 import { evaluate } from 'mathjs';
-import CalculatorButton  from '@/components/CalculatorButton'
+import CalculatorButton from '@/components/CalculatorButton';
 
-export default function HomeScreen() { 
-
-  const [result, setResult] = useState<number | null>(null); 
-  const [error, setError] = useState<string | null>(null); 
+export default function HomeScreen() {
+  const [result, setResult] = useState<number | null>(null);
   const [input, setInput] = useState<string>('');
 
-  const handleButtonPress = (value : string) =>{
-    setInput(prev => prev + value);
-  }
+  const handleButtonPress = (value: string) => {
+    setInput((prev) => prev + value);
+  };
 
-  const handleOperation = () =>{
-    try{
-      const finalAnswer = evaluate(input); 
-      setResult(finalAnswer); 
-      setError(null); 
-    }catch (e){
-      setError('Error Occurred');
-      setResult(null); 
+  const handleOperation = () => {
+    try {
+      const finalAnswer = evaluate(input); // Evaluate the input expression
+      setResult(finalAnswer); // Set the result
+    } catch (e) {
+      setResult(null); // Clear result if error occurs
     }
-  }
-  const handleBackSpace = () =>{
-    
-    const reducedInput = input.slice(0, -1);
+  };
+
+  const handleBackSpace = () => {
+    const reducedInput = input.slice(0, -1); // Remove the last character
     setInput(reducedInput);
-  
+  };
 
-  }
-
-  const handleClear = () =>{
+  const handleClear = () => {
     setResult(null);
-    setInput('');  
-  }
+    setInput('');
+  };
 
   return (
     <View style={styles.container}>
-      <Text>{input}</Text>
-      <Text>{result}</Text>
+      {/* Display Input and Result */}
+      <View style={styles.displaySection}>
+        <Text style={styles.inputText}>{input || '0'}</Text>
+        <Text style={styles.outputText}>{result !== null ? result : ''}</Text>
+      </View>
+
+      {/* Calculator Buttons */}
       <CalculatorButton
         onButtonPress={handleButtonPress}
         onOperation={handleOperation}
         onClear={handleClear}
         onBackSpace={handleBackSpace}
+        inputValue={input}
+        outputValue={result !== null ? result.toString() : ''}
       />
     </View>
   );
 }
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    flexGrow:1,
-    backgroundColor: 'white', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
-  },
-});
+
 

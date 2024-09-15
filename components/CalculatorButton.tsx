@@ -1,5 +1,6 @@
-import React from 'react';
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, {useState} from 'react';
+import style from '../style/style';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Pressable} from 'react-native';
 
 
 type ButtonProps = {
@@ -7,17 +8,17 @@ type ButtonProps = {
     onOperation: () => void;
     onClear: () => void;
     onBackSpace: () => void;
+    inputValue: string; 
+    outputValue: string;
   };
 export default function CalculatorButton({ onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
-    const buttons = [
+        const [isDegree, setIsDegree] = useState(true);
+        const [isScientific, setIsScientific] = useState(true);
         
-        ['sin', 'cos', 'tan', '7','8','9','+','⌫'],
-        ['sin⁻¹', 'cos⁻¹', 'tan⁻¹', 'π', 'e', '4', '5', '6', '-', 'Ans'],
-        ['xʸ', 'x³', 'x²', 'eˣ', '10ˣ', '1', '2', '3', 'x', 'M+'],
-        ['y√x', '3√x', '√x', 'ln', 'log', '0','.','EXP','/','M-'],
-        ['(', ')', '1/x', '%', 'n!', '±', 'RND', 'AC', '=', 'MR'],
+        const numberButtons = ['7','8','9','+', '⌫','4', '5', '6','-','Ans','1', '2', '3','x','M+','0','.', 'EXP', '/','M-','±','RND','=','AC', 'MR'];
+    
+        const scientificOperations = ['sin', 'cos', 'tan','','','sin⁻¹', 'cos⁻¹', 'tan⁻¹', 'π', 'e','xʸ', 'x³', 'x²', 'eˣ', '10ˣ','y√x', '3√x', '√x', 'ln', 'log' ,'(', ')', '1/x', '%', 'n!'];
         
-    ]
 
     const translateButton= (value:string) => {
         switch (value){
@@ -29,6 +30,18 @@ export default function CalculatorButton({ onButtonPress, onOperation, onClear, 
                 break;
             case 'tan⁻¹':
                 onButtonPress('atan');
+                if(isDegree){
+                    onButtonPress(`deg(${value.slice(0,3)})`);
+                }else{
+                    onButtonPress(`${value.slice(0,3)}`);
+                }
+                break;
+            case 'tan':
+                if(isDegree){
+                    onButtonPress(`deg(${value})`);
+                }else{
+                    onButtonPress(`${value}`);
+                }
                 break;
             case 'RND':
                 onClear();
@@ -110,45 +123,79 @@ export default function CalculatorButton({ onButtonPress, onOperation, onClear, 
     }
 
     return (
-        <View style={style.buttonsOverlay}>
-          {buttons.map((row, rowNum) => (
-            <View key={rowNum} style={style.row}>
-              {row.map((value, colNum) => (
-                <TouchableOpacity key={colNum} style={style.button} onPress={() => translateButton(value)}
-                >
-                  <Text style={style.text}>{value}</Text>
-                </TouchableOpacity>
-              ))}
+        <View style={style.container}>
+          {/* Radian Degree, basic scientific toggle */}
+         {/* calc mode*/}
+          <View style={style.toggleContainer}>
+          <Pressable
+          style={[style.radioButton, !isScientific ? style.selected : null]}
+          onPress={() => setIsScientific(false)}
+        >
+          <Text style={[style.radioText, !isScientific ? style.selectedText : null]}>Basic</Text>
+        </Pressable>
+        <Pressable
+          style={[style.radioButton, isScientific ? style.selected : null]}
+          onPress={() => setIsScientific(true)}
+        >
+          <Text style={[style.radioText, isScientific ? style.selectedText : null]}>Scientific</Text>
+        </Pressable>
+
+        {/* Radian Degree*/}
+        <Pressable
+            style={[style.radioButton, isDegree ? style.selected : null]}
+            onPress={() => setIsDegree(true)}
+        >
+            <Text style={[style.radioText, isDegree ? style.selectedText : null]}>Deg</Text>
+        </Pressable>
+
+        <Pressable
+            style={[style.radioButton, !isDegree ? style.selected : null]}
+            onPress={() => setIsDegree(false)}
+        >
+            <Text style={[style.radioText, !isDegree ? style.selectedText : null]}>Rad</Text>
+        </Pressable>
+
+      </View>
+  
+          {/* Parent container for both buttons and display */}
+          <View style={style.buttonsWrapper}>
+
+             {/* Scientific Operations Section */}
+             <View style={style.section}>
+              <View style={style.grid}>
+                {scientificOperations.map((value, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    style={style.button}
+                    onPress={() => translateButton(value)}
+                  >
+                    <Text style={style.text}>{value}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
             </View>
-          ))}
+            {/* Basic Numbers and Operations Section */}
+            <View style={style.section}>
+              <View style={style.grid}>
+                {numberButtons.map((value, idx) => (
+                  <TouchableOpacity
+                    key={idx}
+                    style={style.button}
+                    onPress={() => translateButton(value)}
+                  >
+                    <Text style={style.text}>{value}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View> 
+          </View>
         </View>
       );
+      
 
 }
 
-const style= StyleSheet.create({
 
-    buttonsOverlay: {
-        flexDirection: 'column', // Stack the rows vertically
-        backgroundColor: 'grey'
-    },
-    row: {
-        flexDirection: 'row', 
-        justifyContent: 'space-between', 
-        marginTop: 5,
-    },
-    button: {
-        flex: 1, 
-        margin: 5, 
-        backgroundColor: '#ddd', 
-        paddingVertical: 15, 
-        alignItems: 'center',
-        borderRadius: 5, 
-      },
-      text: {
-        fontSize: 20, 
-        color: 'black', 
-      },
 
-});
-
+  
+  
