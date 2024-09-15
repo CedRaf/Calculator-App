@@ -18,7 +18,7 @@ type ButtonProps = {
   };
 export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMemReturn, onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
         const [isDegree, setIsDegree] = useState(true);
-        const [isScientific, setIsScientific] = useState(true);
+
         
         const numberButtons = ['7','8','9','+', '⌫','4', '5', '6','-','Ans','1', '2', '3','x','M+','0','.', 'EXP', '/','M-','±','RND','=','AC', 'MR'];
     
@@ -128,21 +128,7 @@ export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMe
     return (
         <View style={style.container}>
           {/* Radian Degree, basic scientific toggle */}
-         {/* calc mode*/}
           <View style={style.toggleContainer}>
-          <Pressable
-          style={[style.radioButton, !isScientific ? style.selected : null]}
-          onPress={() => setIsScientific(false)}
-        >
-          <Text style={[style.radioText, !isScientific ? style.selectedText : null]}>Basic</Text>
-        </Pressable>
-        <Pressable
-          style={[style.radioButton, isScientific ? style.selected : null]}
-          onPress={() => setIsScientific(true)}
-        >
-          <Text style={[style.radioText, isScientific ? style.selectedText : null]}>Scientific</Text>
-        </Pressable>
-
         {/* Radian Degree*/}
         <Pressable
             style={[style.radioButton, isDegree ? style.selected : null]}
@@ -169,7 +155,7 @@ export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMe
                 {scientificOperations.map((value, idx) => (
                   <TouchableOpacity
                     key={idx}
-                    style={style.button}
+                    style={style.buttonOp}
                     onPress={() => translateButton(value)}
                   >
                     <Text style={style.text}>{value}</Text>
@@ -183,7 +169,7 @@ export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMe
                 {numberButtons.map((value, idx) => (
                   <TouchableOpacity
                     key={idx}
-                    style={style.button}
+                    style={style.buttonNum}
                     onPress={() => translateButton(value)}
                   >
                     <Text style={style.text}>{value}</Text>
