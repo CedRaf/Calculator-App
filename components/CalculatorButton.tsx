@@ -4,6 +4,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Pressable} from '
 
 
 type ButtonProps = {
+    on3rdRoot : () => void;
     onNthRoot : () => void; 
     onMemMinus : () => void; 
     onMemPlus : () => void; 
@@ -15,7 +16,7 @@ type ButtonProps = {
     inputValue: string; 
     outputValue: string;
   };
-export default function CalculatorButton({onMemMinus, onMemPlus, onMemReturn, onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
+export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMemReturn, onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
         const [isDegree, setIsDegree] = useState(true);
         const [isScientific, setIsScientific] = useState(true);
         
@@ -67,18 +68,16 @@ export default function CalculatorButton({onMemMinus, onMemPlus, onMemReturn, on
                 onButtonPress('^2');
                 break;
             case 'eˣ':
-               onButtonPress('exp('); //how to implement  since it requires a secondary input before converting to math.exp
+                onButtonPress('exp('); //how to implement  since it requires a secondary input before converting to math.exp
                 break;     
             case 'x':
                 onButtonPress('*');
                 break; 
-
-                //incomplete equations
             case 'y√x':
                 onNthRoot();
                 break;
             case '3√x':
-                onButtonPress('');
+                on3rdRoot();
                 break;
             case '√x':
                 onButtonPress('sqrt('); //test

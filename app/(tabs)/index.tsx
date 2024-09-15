@@ -48,25 +48,20 @@ export default function HomeScreen() {
     setInput(memory.toString()); 
   }
 
-  const handleXYRoot = () => {
-    // Split input to separate y and x (e.g., for "y√x", y = input before the last number, x = the last number)
-    const inputArray = input.split(/([+\-*/])/); // Split input by operators
-    const x = inputArray.pop(); // x is the last value (number we want the root of)
-    const y = inputArray.join(''); // y is the rest of the input (base of the root)
-    
-    if (x && y) {
-      // Use the nthRoot function from mathjs to compute y√x
-      const result = evaluate(`nthRoot(${x}, ${y})`);
-      
-      // Set the result
-      setResult(result);
-      setInput(result.toString()); // Update the input to show the result
-    } else {
-      // Handle cases where y or x is missing or invalid
-      setResult(0);
-      setInput('');
-    }
-  };
+  const handleXYRoot = () =>{
+    let lastChar = input.charAt(input.length - 1);
+    handleBackSpace();
+    handleButtonPress(`nthRoot(${lastChar},`);
+  }
+
+  const handle3XRoot = () =>{
+    let lastChar = input.charAt(input.length - 1);
+    handleBackSpace();
+    handleButtonPress(`nthRoot(${lastChar},3)`);
+  }
+
+
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Display Input and Result */}
@@ -77,6 +72,7 @@ export default function HomeScreen() {
 
       {/* Calculator Buttons */}
       <CalculatorButton
+       on3rdRoot = {handle3XRoot}
         onMemPlus = {handleMemPlus}
         onMemMinus = {handleMemMinus}
         onMemReturn = {handleMemReturn}
