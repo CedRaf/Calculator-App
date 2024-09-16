@@ -1,6 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import style from '../style/style';
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Pressable} from 'react-native';
+
 
 
 type ButtonProps = {
@@ -15,9 +16,12 @@ type ButtonProps = {
     onBackSpace: () => void;
     inputValue: string; 
     outputValue: string;
+    isDegree: boolean;
+    setIsDegree: (value: boolean) => void;
   };
-export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMemReturn, onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
-        const [isDegree, setIsDegree] = useState(true);
+export default function CalculatorButton({isDegree, setIsDegree, on3rdRoot, onMemMinus, onMemPlus, onMemReturn, onNthRoot, onButtonPress, onOperation, onClear, onBackSpace }: ButtonProps) {
+        
+        
 
         
         const numberButtons = ['7','8','9','+', '⌫','4', '5', '6','-','Ans','1', '2', '3','x','M+','0','.', 'EXP', '/','M-','±','RND','=','AC', 'MR'];
@@ -27,26 +31,26 @@ export default function CalculatorButton({on3rdRoot, onMemMinus, onMemPlus, onMe
 
     const translateButton= (value:string) => {
         switch (value){
+            case 'π':
+                onButtonPress('pi');
+                break;
             case 'sin⁻¹':
-                onButtonPress('asin');
+                onButtonPress('asin(');
                 break;
             case 'cos⁻¹':
-                onButtonPress('acos');
+                onButtonPress('acos(');
                 break;
             case 'tan⁻¹':
-                onButtonPress('atan');
-                if(isDegree){
-                    onButtonPress(`deg(${value.slice(0,3)})`);
-                }else{
-                    onButtonPress(`${value.slice(0,3)}`);
-                }
+                onButtonPress('atan(');
                 break;
             case 'tan':
-                if(isDegree){
-                    onButtonPress(`deg(${value})`);
-                }else{
-                    onButtonPress(`${value}`);
-                }
+                onButtonPress('tan((');
+                break;
+            case 'sin':
+                onButtonPress('sin((');
+                break;
+            case 'cos':
+                onButtonPress('cos((');
                 break;
             case 'RND':
                 onClear();

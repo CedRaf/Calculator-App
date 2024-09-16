@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
       height: 45,
       width: 70,
       borderColor:'black',
-      borderWidth:'1px'
+      borderWidth: 1
     },
 
     buttonNum: {
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
         height: 45,
         width: 70,
         borderColor:'black',
-        borderWidth:'1px',
+        borderWidth: 1
       },
     text: {
       fontSize: 18,

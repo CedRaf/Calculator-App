@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from '@/style/style';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { evaluate, nthRoot } from 'mathjs';
@@ -8,17 +8,30 @@ export default function HomeScreen() {
   const [result, setResult] = useState<number>(0);
   const [input, setInput] = useState<string>('');
   const [memory, setMemory] = useState<number>(0); 
-
+  const [isDegree, setIsDegree] = useState<boolean>  (false);
+  
+  useEffect(() => {
+    console.log('isDegree changed:', isDegree);
+  }, [isDegree]);
   const handleButtonPress = (value: string) => {
     setInput((prev) => prev + value);
   };
 
   const handleOperation = () => {
     try {
-      const finalAnswer = evaluate(input); 
-      setResult(finalAnswer); 
-      return finalAnswer;
+      if(!isDegree){
+        const finalAnswer = evaluate(input); 
+        setResult(finalAnswer); 
+        return finalAnswer;
+      }
+      else if(isDegree){
+        const finalAnswer = evaluate(`${input} )* (pi / 180))`); 
+        setResult(finalAnswer); 
+        return finalAnswer;
+      }
+
     } catch (e) {
+      console.error('Error evaluating expression:', e);
       setResult(0); 
     }
   };
@@ -72,6 +85,7 @@ export default function HomeScreen() {
 
       {/* Calculator Buttons */}
       <CalculatorButton
+        
        on3rdRoot = {handle3XRoot}
         onMemPlus = {handleMemPlus}
         onMemMinus = {handleMemMinus}
@@ -83,6 +97,9 @@ export default function HomeScreen() {
         onBackSpace={handleBackSpace}
         inputValue={input}
         outputValue={result !== null ? result.toString() : ''}
+        isDegree={isDegree}
+        setIsDegree={setIsDegree}
+        
       />
     </ScrollView>
   );
